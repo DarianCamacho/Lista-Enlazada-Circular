@@ -1,0 +1,701 @@
+//Programa Codigo C++ Listas Doblemente Enlazadas Circular
+//Proyecto Final Juan Rafael Astúa Agüero y Darian Camacho Delgado
+//Curso de Estructura de Datos
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+
+using namespace std;
+ 
+struct nodo{
+       int tel;
+	   string nombre;
+	   string empresa;
+	   int dia;
+	   int mes;
+	   int year;
+	   string dire;
+       int anioAct=2022;
+	   int mesAct=12;
+	   int diaAct=20;
+	   struct nodo *sgte;  // Variable tipo Puntero
+	   struct nodo *ant; // Variable tipo Puntero
+};
+ 
+typedef struct nodo *Tlista;
+
+
+void calcularLaEdad (Tlista &inicio,int tel)
+{
+	int dia;
+	int mes;
+	int year;
+    int anioAct=2022;
+	int mesAct=12;
+	int diaAct=20;
+	int respFecha,respMes;
+    int i=1;
+	int encontrado=0;
+	Tlista ptr;
+	ptr=inicio;
+	while (ptr->sgte!=inicio && encontrado==0)
+	{
+		if(ptr->tel==tel)
+		{	
+			if (diaAct < ptr->dia)
+			{
+			//En caso de ser menor la fecha actual que el nacimiento
+			diaAct = diaAct + 30; //Se le suma los 30 dias (1 mes) a la fecha actual
+			mesAct = mesAct - 1; //Se le resta un mes (30 dias) al mes actual
+			respFecha = diaAct - ptr->dia; //Se le resta fecha de nacimiento al actual
+			}
+			else //En caso de ser mayor la fecha actual que el nacimiento
+			respFecha = diaAct - dia; //Se le resta fecha de nacimiento al actual
+			
+			if (mesAct < ptr->mes)
+			{ 	//En caso de ser menor el mes actual al nacimiento
+				mesAct = mesAct + 12; // Se le suma los 12 meses (1 año) al mes actual
+		        anioAct = anioAct - 1 ; // Se le resta 1 año ( 12 meses) al año actual
+		        respMes = mesAct - ptr->mes; //Se le resta año nacimiento al actual
+			}
+			else //En caso de ser mayor el mes actual que el nacimiento
+		        respMes = mesAct - ptr->mes; //Se le resta año nacimiento al actual
+		 
+	   		cout<< "\n Contacto encontrado en la posición : "<<i<<endl;
+	   		cout << "\nEl contacto. tiene:\n";
+		    cout << " Edad: " <<anioAct - ptr->year << endl; //Muestra edad
+	   		cout<<endl;
+			cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+			cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+			cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+			cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+			cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+			cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+			cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+			cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+			cout<<endl;
+		   
+		   encontrado=1;
+		}
+		else
+		{
+			i=i+1;
+			ptr=ptr->sgte;
+		} 
+	}
+	if (ptr->sgte==inicio && ptr->tel==tel)
+	{
+			if(ptr->tel==tel)
+			{	
+			if (diaAct < ptr->dia)
+			{
+			//En caso de ser menor la fecha actual que el nacimiento
+			diaAct = diaAct + 30; //Se le suma los 30 dias (1 mes) a la fecha actual
+			mesAct = mesAct - 1; //Se le resta un mes (30 dias) al mes actual
+			respFecha = diaAct - ptr->dia; //Se le resta fecha de nacimiento al actual
+			}
+			else //En caso de ser mayor la fecha actual que el nacimiento
+			respFecha = diaAct - dia; //Se le resta fecha de nacimiento al actual
+			
+			if (mesAct < ptr->mes)
+			{ 	//En caso de ser menor el mes actual al nacimiento
+				mesAct = mesAct + 12; // Se le suma los 12 meses (1 año) al mes actual
+		        anioAct = anioAct - 1 ; // Se le resta 1 año ( 12 meses) al año actual
+		        respMes = mesAct - ptr->mes; //Se le resta año nacimiento al actual
+			}
+			else //En caso de ser mayor el mes actual que el nacimiento
+		        respMes = mesAct - ptr->mes; //Se le resta año nacimiento al actual
+		        
+		cout<< "\n Contacto encontrado en la posición : "<<i<<endl;
+		cout<<endl;
+		cout << "\nEl contacto. tiene:\n";
+		cout << " Edad: " <<anioAct - ptr->year << endl; //Muestra edad
+		cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+		cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+		cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+		cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+		cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+		cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+		cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+		cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+		cout<<endl;
+		encontrado=1;
+	}
+			
+	if (encontrado==0) 
+	  cout<< "\n El contacto con este numero de telefono no existe en la base de datos  "<<endl;
+	}
+}
+void insertar(Tlista &inicio,int tel,string nombre, string empresa,string dire, int dia, int mes, int year, int anioAct, int mesAct, int diaAct)
+{
+	int telEncontrado,_pase;
+	Tlista ptr, aux;
+	
+	ptr=new(struct nodo);
+	ptr->ant=NULL;
+	ptr->sgte=NULL;
+	ptr->tel=tel;
+	ptr->nombre=nombre;
+	ptr->empresa=empresa;
+	ptr->dire=dire;
+	ptr->dia=dia;
+	ptr->mes=mes;
+	ptr->year=year;
+	
+	if (inicio==NULL)
+	{
+		inicio=ptr;
+		inicio->ant=ptr;
+		inicio->sgte=ptr;	
+	}
+	else
+	{
+		
+		aux=inicio;
+		telEncontrado=0;
+		_pase=0;
+		while(aux->sgte!=inicio && telEncontrado==0) //Recorrer toda la lista
+			{
+				if (aux->tel==tel)
+				{
+					cout<<"Número de telefono ya existe en la base de datos"<<endl;
+					telEncontrado=1;
+					_pase=1;
+				
+				}
+				else 	
+				{
+					aux=aux->sgte;
+				}
+					
+			}
+			if (telEncontrado==0 && _pase==0)	
+			{
+				ptr->ant=aux;
+				ptr->sgte=ptr->ant->sgte;
+				ptr->ant->sgte=ptr;
+				ptr->sgte->ant=ptr;	
+			}		 	 
+		 	
+	
+	}
+}
+
+void menu1()
+{
+	//MENU PRINCIPAL;
+    cout<<"\n\t\tProyecto programado final \n\n";
+    cout<<" 1. Ingresar Contacto                 	"<<endl;
+    cout<<" 2. Borrar  Contacto	                	"<<endl;
+    cout<<" 3. Modificar Contacto               	"<<endl;
+    cout<<" 4. Consultar Contacto                	"<<endl;
+    cout<<" 5. Mostrar todos los contactos       	"<<endl;
+    cout<<" 6. Salir								"<<endl;
+	cout<<"\n INGRESE OPCION: ";
+}
+	
+  
+    
+
+void imprimira (Tlista &inicio)
+{
+	int i=0;
+	Tlista ptr;
+	ptr=inicio;
+	while(ptr->sgte!=inicio)
+	{
+		cout<<endl;
+		cout<<' '<<i+1 <<".Tel:	 	"<< ptr->tel<<endl;
+		cout<<' '<<i+1 <<".Nombre: 	"<< ptr->nombre<<endl;
+		cout<<' '<<i+1 <<".Empresa: 	"<< ptr->empresa<<endl;
+		cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+		cout<<' '<<i+1 <<".Día: 	"<< ptr->dia<<endl;
+		cout<<' '<<i+1 <<".Mes) 	"<< ptr->mes<<endl;
+		cout<<' '<<i+1 <<".Year) 	"<< ptr->year<<endl;
+		cout<<' '<<i+1 <<".Dirección) 	"<< ptr->dire<<endl;
+		cout<<endl;
+		
+		ptr=ptr->sgte;
+		i++;
+	}
+	if(ptr->sgte==inicio)
+		cout<<endl;
+		cout<<' '<<i+1 <<".Tel:	 	"<< ptr->tel<<endl;
+		cout<<' '<<i+1 <<".Nombre: 	"<< ptr->nombre<<endl;
+		cout<<' '<<i+1 <<".Empresa: 	"<< ptr->empresa<<endl;
+		cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+		cout<<' '<<i+1 <<".Día: 	"<< ptr->dia<<endl;
+		cout<<' '<<i+1 <<".Mes) 	"<< ptr->mes<<endl;
+		cout<<' '<<i+1 <<".Year) 	"<< ptr->year<<endl;
+		cout<<' '<<i+1 <<".Dirección) 	"<< ptr->dire<<endl;
+		cout<<endl;
+}
+
+
+// Metódo Buscar número de telefono
+void buscarTel(Tlista &inicio,int tel)
+{
+	int i=1;
+	int encontrado=0;
+	Tlista ptr;
+	ptr=inicio;
+	while (ptr->sgte!=inicio && encontrado==0)
+	{
+		if(ptr->tel==tel)
+		   {
+		   	cout<< "\n Contacto encontrado en la posición : "<<i<<endl;
+		   	cout<<endl;
+			cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+			cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+			cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+			cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+			cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+			cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+			cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+			cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+			cout<<endl;
+		   
+		   encontrado=1;
+		   }
+		else
+		{
+			i=i+1;
+			ptr=ptr->sgte;
+		} 
+	}
+	if (ptr->sgte==inicio && ptr->tel==tel)
+	{
+		cout<< "\n Contacto encontrado en la posición : "<<i<<endl;
+		cout<<endl;
+		cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+		cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+		cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+		cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+		cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+		cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+		cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+		cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+		cout<<endl;
+		encontrado=1;
+	}
+			
+	if (encontrado==0) 
+	  cout<< "\n El contacto con este numero de telefono no existe en la base de datos  "<<endl;
+}
+
+void buscarNombre(Tlista &inicio,string nombre)
+{
+	int i=1;
+	int encontrado=0;
+	Tlista ptr;
+	ptr=inicio;
+	while (ptr->sgte!=inicio && encontrado==0)
+	{
+		if(ptr->nombre==nombre)
+		   {
+		   	cout<< "\n Contacto encontrado en la posicion : "<<i<<endl;
+		   	cout<<endl;
+			cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+			cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+			cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+			cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+			cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+			cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+			cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+			cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+			cout<<endl;
+		   
+		   encontrado=1;
+		   }
+		else
+		{
+			i=i+1;
+			ptr=ptr->sgte;
+		} 
+	}
+	if (ptr->sgte==inicio && ptr->nombre==nombre)
+	{
+		cout<< "\n Contacto encontrado en la posicion : "<<i<<endl;
+			cout<<endl;
+			cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+			cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+			cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+			cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+			cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+			cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+			cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+			cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+			cout<<endl;
+		encontrado=1;
+	}
+			
+	if (encontrado==0) 
+	  cout<< "\n El contacto con este nombre no existe en la base de datos  "<<endl;
+}
+
+void buscarEmpresa(Tlista &inicio,string empresa)
+{
+	int i=1;
+	int encontrado=0;
+	Tlista ptr;
+	ptr=inicio;
+	while (ptr->sgte!=inicio)// && encontrado==0)
+	{
+		if(ptr->empresa==empresa)
+		   {
+		   	cout<< "\n Contacto encontrado en la posicion : "<<i<<endl;
+		   	cout<<endl;
+			cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+			cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+			cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+			cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+			cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+			cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+			cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+			cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+			cout<<endl;
+		   
+		   encontrado=1;
+		   i=i+1;
+			ptr=ptr->sgte;
+		   }
+		else
+		{
+			i=i+1;
+			ptr=ptr->sgte;
+		} 
+	}
+	if (ptr->sgte==inicio && ptr->empresa==empresa)
+	{
+		cout<< "\n Contacto encontrado en la posicion : "<<i<<endl;
+			cout<<endl;
+			cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+			cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+			cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+			cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+			cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+			cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+			cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+			cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+			cout<<endl;
+		encontrado=1;
+		encontrado=1;
+	}
+			
+	if (encontrado==0) 
+	  cout<< "\n El contacto con esta empresa no existe en la base de datos  "<<endl;
+}
+
+void modificarn (Tlista &inicio, int valor,int nuevoValor)
+{
+	//Tlista inicio;
+	void eliminarn(Tlista &inicio,int valor);
+	//cout<< "\n Prueba de funcionamiento"<<endl;	
+	//void insertar(Tlista &inicio,int valor);
+}
+
+// Metódo Buscar Fecha de Nacimiento
+void buscarFechaNacimiento(Tlista &inicio,int dia,int mes,int year)
+{
+    int i=1;
+    int encontrado=0;
+    Tlista ptr;
+    ptr=inicio;
+    while (ptr->sgte!=inicio && encontrado==0)
+    {
+        if(ptr->dia==dia && ptr->mes==mes && ptr->year==year)
+           {
+               	cout<< "\n Contacto encontrado en la posicion : "<<i<<endl;
+               	cout<<endl;
+				cout<<' '<<i <<".Tel:	 	"<< ptr->tel<<endl;
+				cout<<' '<<i <<".Nombre: 	"<< ptr->nombre<<endl;
+				cout<<' '<<i <<".Empresa: 	"<< ptr->empresa<<endl;
+				cout<<' '<<"Fecha de Nacimiento 	"<<endl;
+				cout<<' '<<i <<".Día: 	"<< ptr->dia<<endl;
+				cout<<' '<<i <<".Mes: 	"<< ptr->mes<<endl;
+				cout<<' '<<i <<".Year: 	"<< ptr->year<<endl;
+				cout<<' '<<i <<".Dirección: 	"<< ptr->dire<<endl;
+				cout<<endl;
+           
+           encontrado=1;
+           }
+        else
+        {
+            i=i+1;
+            ptr=ptr->sgte;
+        }
+    }
+    if (ptr->sgte==inicio && ptr->dia==dia && ptr->mes==mes && ptr->year==year)
+    {
+        cout<< "\n Contacto encontrado en la posicion : "<<i<<endl;
+        cout<<endl;
+        cout<<' '<<i <<".Tel:         "<< ptr->tel<<endl;
+        cout<<' '<<i <<".Nombre:     "<< ptr->nombre<<endl;
+        cout<<' '<<i <<".Empresa:     "<< ptr->empresa<<endl;
+        cout<<' '<<"Fecha de Nacimiento     "<<endl;
+        cout<<' '<<i <<".Día:     "<< ptr->dia<<endl;
+        cout<<' '<<i <<".Mes:     "<< ptr->mes<<endl;
+        cout<<' '<<i <<".Year:     "<< ptr->year<<endl;
+        cout<<' '<<i <<".Dirección:     "<< ptr->dire<<endl;
+        cout<<endl;
+        encontrado=1;
+    }
+            
+    if (encontrado==0)
+      cout<< "\n El contacto con esta fecha de nacimiento no existe en la base de datos  "<<endl;
+}
+
+void eliminarn(Tlista &inicio,int valor)
+{
+	int i=1;
+	int encontrado=0;
+	Tlista ptr;
+	ptr=inicio;
+	if (inicio->tel == valor)
+		{
+		 ptr->sgte->ant=ptr->ant;
+		 ptr->ant->sgte=ptr->sgte;
+		 inicio=ptr->sgte;
+		 delete(ptr);
+		 cout<<" Contacto eliminado de la posicion: "<<i<<endl;	
+		}
+	else
+	{
+	 while(ptr->sgte!=inicio && encontrado==0)
+	 {
+	  if (ptr->tel==valor)
+	    {
+	  	 encontrado=1;
+	  	 ptr->sgte->ant= ptr->ant;
+	  	 ptr->ant->sgte=ptr->sgte;
+	  	 delete(ptr);
+	  	 cout<<" Contacto eliminado de la posicion:"<<i<<endl;	
+	    }
+	  else
+	  	  ptr=ptr->sgte;
+			i++;	  	  
+	 }
+	 if (ptr->sgte==inicio && ptr->tel==valor)
+	 {
+	  encontrado=1;
+	  ptr->ant->sgte=ptr->sgte;
+	  ptr->sgte->ant=ptr->ant;
+	  delete(ptr);
+	  
+	  cout<<" Contacto  eliminado de la posicion :"<<i<<endl;		
+	 }
+	 else
+	 { 
+	  if (encontrado==0)
+	    cout<<" El contacto con el número a eliminar no esta en base de datos"<<endl;
+	 }
+	
+	}
+
+						
+}
+//Programa Principal
+int main()
+{
+    Tlista inicio = NULL;
+    int op, _tel,_dato2,_fNac, pos;     // opcion del menu
+    int sub;
+    string _nombre;
+	string _empresa;
+	string _dire;
+	int _dia;
+	int _mes;
+	int _year;
+	int _anioAct;
+	int _mesAct;
+	int _diaAct;
+	//string _empresa;
+    system("color 0b");
+    do
+    {
+        menu1();  cin>> op;
+ 
+        switch(op)
+        {
+        	//Ingresar Contacto;
+            case 1:
+                cout<< "\n Digite el telefono:		"			;cin>> _tel;cin.ignore();
+                cout<< "\n Digite el Nombre:		"			;getline(cin,_nombre);
+				cout<< "\n Empresa:			"				;getline(cin,_empresa);
+                cout<< "\n Digite la fecha de Nacimiento:	"<<endl;
+				cout<<"Dia:		"; cin>>_dia;
+ 				cout<<"Mes:		"; cin>>_mes; 
+ 				cout<<"Year:		"; cin>>_year; cin.ignore();
+                cout<< "\n Dirección:			"				;getline(cin,_dire);
+                
+				insertar(inicio, _tel,_nombre,_empresa,_dire,_dia,_mes,_year,_anioAct,_mesAct,_diaAct);
+                imprimira (inicio);
+				 
+            break;
+            case 2:
+            	//Eliminar Contacto;
+					if (inicio==NULL)
+                 	 cout<< "\n La lista esta vacía ....."<<endl;
+                 else
+				    {
+					 cout<< "\n Digite el telefono del contacto a eliminar "; cin>> _tel;
+					 
+                     eliminarn(inicio, _tel);
+                     
+                    }
+			break;
+            case 3:
+            	//Modificar Contacto;
+            	int _pase;
+				if (inicio==NULL)
+                 	 cout<< "\n La lista esta vacía ....."<<endl;
+                 else
+				    {
+					cout<< "\n Digite el telefono del contacto a modificar: "; cin>> _tel;
+					buscarTel(inicio, _tel);
+					 
+					eliminarn(inicio, _tel);
+					
+					cout<<"Desea modificar o agregar contacto (1-Sí/2-No): ";cin>>_pase;
+						
+						if (_pase==1)
+						{
+							cout<< "\n Digite el telefono:		"			;cin>> _tel;cin.ignore();
+			                cout<< "\n Digite el Nombre:		"			;getline(cin,_nombre);
+							cout<< "\n Empresa:			"				;getline(cin,_empresa);
+			                cout<< "\n Digite la fecha de Nacimiento:	"<<endl;
+							cout<<"Dia:		"; cin>>_dia;
+			 				cout<<"Mes:		"; cin>>_mes; 
+			 				cout<<"Year:		"; cin>>_year; cin.ignore();
+			                cout<< "\n Dirección:			"				;getline(cin,_dire);
+	                 
+	                 		insertar(inicio, _tel,_nombre,_empresa,_dire,_dia,_mes,_year,_anioAct,_mesAct,_diaAct);
+	                 		imprimira (inicio);	
+						} 
+				    
+                    }
+			break;
+                        
+			case 4:
+				
+					
+					//Sub Menu;
+					cout<<"\n\t\t SUB MENU \n\n";
+				    cout<<" 1. Telefono             			"<<endl;
+				    cout<<" 2. Nombre               			"<<endl;
+				    cout<<" 3. Empresa              			"<<endl;
+				    cout<<" 4. Edad                				"<<endl;
+				    cout<<" 5. Por fecha de nacimiento			"<<endl;
+				    cout<<" 6. Volver							"<<endl;
+				    
+					cout<<"\n INGRESE UNA OPCION DEL CONSULTA: 	";cin>> sub;
+					switch(sub)
+					{
+						case 1:
+							{
+								//Buscar Telefono
+								 if (inicio==NULL)
+                 					 cout<< "\n No hay contactos almacenados en la base de datos ....."<<endl;
+                				 else
+				   				 {
+					 				cout<< "\n Digite el telefono del contacto a buscar: "; cin>> _tel;
+                    				 buscarTel(inicio, _tel);
+                     
+                    			}
+							}
+						break;
+						
+						case 2:
+							{
+								//Buscar Nombre
+								 if (inicio==NULL)
+                 					 cout<< "\n No hay contactos almacenados en la base de datos ....."<<endl;
+                				 else
+				   				 {
+					 				cout<< "\n Digite el nombre del contacto a buscar: "; cin>> _nombre;
+                    				 buscarNombre(inicio, _nombre);
+                     
+                    			}
+							}
+						break;
+						
+						case 3:
+							{
+								//Buscar Empresa
+								 if (inicio==NULL)
+                 					 cout<< "\n No hay contactos almacenados en la base de datos ....."<<endl;
+                				 else
+				   				 {
+					 				cout<< "\n Digite ls empresa del contacto a buscar: "; cin>> _empresa;
+                    				 buscarEmpresa(inicio, _empresa);
+                     
+                    			}
+							}
+						
+						case 4:
+							{
+								//Edad con la fecha actual
+								//Buscar Empresa
+								 if (inicio==NULL)
+                 					 cout<< "\n No hay contactos almacenados en la base de datos ....."<<endl;
+                				 else
+				   				 {
+					 				cout<< "\n Digite el numero del contacto a buscar: "; cin>> _tel;
+                    				 calcularLaEdad(inicio, _tel);
+		                   		 }
+		                   }
+						break;
+						
+						case 5:
+                            {
+                                //Buscar Cumpleanhos
+                                 if (inicio==NULL)
+                                      cout<< "\n No hay contactos almacenados en la base de datos ....."<<endl;
+                                 else
+                                    {
+                                     cout<< "\n Digite la fecha de nacimiento del contacto que desea buscar: "<<endl;
+                                     cout<< "\n Digite el dia de nacimiento:	"; cin>> _dia;
+                                     cout<< "\n Digite el mes de nacimiento:	"; cin>> _mes;
+                                     cout<< "\n Digite el anho de nacimiento:	"; cin>> _year;
+                                     buscarFechaNacimiento(inicio, _dia, _mes,_year);
+                     
+                                }
+                            }
+                            break;
+						
+						case 6:
+							{
+								//Volver al Menu Principal;
+								system("cls");
+								return main();
+							}
+							default:
+							{
+								cout<<"La opcion seleccionada no es valida"<<endl;
+							}
+							
+					}
+				
+			break;
+			
+			case 5:
+				//Mostrar Todos Los Contactos;
+            	 if (inicio==NULL)
+                 	 cout<< "\n La lista esta vacía ....."<<endl;
+                 else
+				    {
+					 cout<< "\n Imprimir Lista: "<<endl;
+                     imprimira(inicio);
+                    }
+            break;
+			
+			
+       }
+        cout<<endl<<endl;
+        system("pause");  system("cls");
+ 
+    }while(op!=6);
+
+   system("pause");
+   return 0;
+}
